@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/twitter-bootstrap/3.4.0/css/bootstrap.min.css">
+</head>
+<style>
+    .success_del{
+        text-decoration:line-through;color:#ccc;
+    }
+
+</style>
+<body style="padding:5px;">
+
+
+<div class="container">
+    <div class="row">
+        <h2 class="text-center">  AX Todo 应用</h2>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3> todo 列表 </h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label> 添加todo  </label>
+                    <input type="text" placeholder="请输入您要添加的todo" id="todo" class="form-control">
+                    <br>
+                    <button id="btn" class="btn btn-success"> 发布todo </button>
+                    <br>
+                    <br>
+                    <table class="table table-bordered border-hover">
+                        <tr>
+                            <th  class="text-center">
+                                勾选已完成
+                            </th>
+                            <th  class="text-center">
+                                内容
+                            </th>
+                            <th>
+                                删除
+                            </th>
+                        </tr>
+                        <tbody  id="data">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="text-primary panel-footer">
+                已完成 <span id="success"> 0 </span>
+                未完成 <span id="error"> 0 </span>
+                所有 <span id="all"> 0 </span>
+                <button class="btn btn-default"  id="clear"> 清除todo </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        let btn = document.getElementById("btn");
+        let del_todo = document.getElementsByClassName("del_todo");
+        let clear = document.getElementById("clear");
+        let success = document.getElementById("success");
+        let error = document.getElementById("error");
+        let all = document.getElementById("all");
+        let v = document.getElementById("todo");
+        let check = document.getElementsByClassName("check");
+        let addData = document.getElementById("data");
+        clear.onclick = function(){
+             let addData = document.getElementById("data");
+             addData.innerHTML = "";
+            setSuccess();
+        };
+        btn.onclick=function(){
+            let v = document.getElementById("todo").value;
+            if(v === "" || v.length === 0){
+                alert("todo 不要为空哦!");
+                return;
+            }
+            let tr = document.createElement("tr");
+            tr.innerHTML = "<td class='text-center'><input type='checkbox' class='check'/></td><td class='text-center'>"+v+"</td><td class='text-center'><button class='del_todo btn btn-primary'> 删除todo </button></td>";
+            addData.appendChild(tr);
+            all.innerText  = addData.children.length+"";
+            setSuccess();
+        };
+        addData.onclick=function(){
+            for(let i = 0 ; i < del_todo.length; i++) {
+                del_todo[i].addEventListener("click",function(e){
+                    addData.removeChild(this.parentNode.parentNode);
+                    all.innerText  = addData.children.length+"";
+                    setSuccess();
+                });
+                check[i].onchange=function () {
+                      console.log(this.parentNode.parentNode);
+                      if(this.parentNode.parentNode.classList.contains("success_del")){
+                          this.parentNode.parentNode.classList.remove("success_del");
+                      }else{
+                          this.parentNode.parentNode.classList.add("success_del");
+                      }
+                      setSuccess();
+                }
+            }
+
+        }
+        setSuccess();
+        function setSuccess(){
+            let i = 0;
+            let o = 0;
+            for(let j = 0 ;j < addData.children.length; j++){
+                if(addData.children[j].classList.contains("success_del")){
+                    i++;
+                }else{
+                    o++;
+                }
+            }
+            success.innerText = i + "";
+            error.innerText = o + "";
+        }
+
+</script>
+</body>
+</html>
